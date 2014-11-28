@@ -58,7 +58,7 @@ public class PersonDataProcessor {
 			summedAge += person.getAge();
 		}
 		try {
-			int result = summedAge / persons.size();
+			double result = (double) summedAge / persons.size();
 			return result;
 		} catch (ArithmeticException e) {
 			throw new DataProcessorException(e);
@@ -85,7 +85,7 @@ public class PersonDataProcessor {
 					"Can't calculate the difference, beacuse parameters are not correct",
 					e);
 		}
-		return person2TotalDays - person1TotalDays;
+		return (double) person2TotalDays - person1TotalDays;
 	}
 
 	/**
