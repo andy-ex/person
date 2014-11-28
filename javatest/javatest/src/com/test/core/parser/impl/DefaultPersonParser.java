@@ -16,7 +16,6 @@ import java.util.Map;
 
 public class DefaultPersonParser implements PersonParser {
 
-    @Override
     public List<Person> parsePerson(File file) throws ParserException{
         List<Person> persons = new ArrayList<Person>();
         BufferedReader bufferedReader = null;

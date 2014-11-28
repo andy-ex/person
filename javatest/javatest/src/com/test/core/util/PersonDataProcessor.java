@@ -2,6 +2,7 @@ package com.test.core.util;
 
 import java.util.List;
 
+import com.test.core.exception.DataProcessorException;
 import com.test.domain.Person;
 import com.test.domain.enumeration.Gender;
 
@@ -12,14 +13,24 @@ import com.test.domain.enumeration.Gender;
  */
 public class PersonDataProcessor {
 
+	private static final int SECOND = 1000;
+	private static final int MINUTE = 60 * SECOND;
+	private static final int HOUR = 60 * MINUTE;
+	private static final int DAY = 24 * HOUR;
+
 	/**
 	 * Count how much males are in list of persons
 	 * 
 	 * @param persons
 	 *            list of persons
 	 * @return
+	 * @throws DataProcessorException
 	 */
-	public static int countMale(final List<Person> persons) {
+	public static int countMale(final List<Person> persons)
+			throws DataProcessorException {
+		if (persons == null || persons.size() == 0) {
+			throw new DataProcessorException("ERROR: No persons was specified");
+		}
 		int numberOfMalePersons = 0;
 		for (Person person : persons) {
 			if (Gender.MALE == person.getGender()) {
@@ -35,19 +46,23 @@ public class PersonDataProcessor {
 	 * @param persons
 	 *            list of persons
 	 * @return
+	 * @throws DataProcessorException
 	 */
-	public static double countAverageAge(final List<Person> persons) {
+	public static double countAverageAge(final List<Person> persons)
+			throws DataProcessorException {
+		if (persons == null || persons.size() == 0) {
+			throw new DataProcessorException("ERROR: No persons was specified");
+		}
 		int summedAge = 0;
 		for (Person person : persons) {
 			summedAge = person.getAge();
 		}
 		int result;
-		if (summedAge > 0) {
-			result = summedAge / persons.size();
-		} else {
-			result = 0;
-		}
+		result = summedAge / persons.size();
 		return result;
+		// } else {
+		// throw new DataProcessorException();
+		// }
 	}
 
 	/**
@@ -56,9 +71,18 @@ public class PersonDataProcessor {
 	 * @param person1
 	 * @param person2
 	 * @return
+	 * @throws DataProcessorException
 	 */
-	public static int countDaysOlder(final Person person1, final Person person2) {
-		return 0;
+	public static double countDaysOlder(final Person person1,
+			final Person person2) throws DataProcessorException {
+		double person1TotalDays;
+		double person2TotalDays;
+		if (person1 != null && person2 != null) {
+			person1TotalDays = person1.getDateOfBirth().getTime() / DAY;
+			person2TotalDays = person2.getDateOfBirth().getTime() / DAY;
+		} else {
+			throw new DataProcessorException();
+		}
+		return person1TotalDays - person2TotalDays;
 	}
-
 }
