@@ -20,6 +20,7 @@ import java.util.Map;
 public class DefaultPersonParser implements PersonParser {
 
     private static final String DATE_FORMAT = "dd/MM/yyyy";
+    private static final String LINE_SPLIT_REGEX = ",";
 
     @Override
     public List<Person> parsePerson(File file) throws ParserException {
@@ -57,9 +58,9 @@ public class DefaultPersonParser implements PersonParser {
     private Map<Integer, ColumnHeader> processHeaderLine(String line) {
         Map<Integer, ColumnHeader> headersMap = new HashMap<Integer, ColumnHeader>();
 
-        String[] headers = line.split(",");
+        String[] headers = line.split(LINE_SPLIT_REGEX);
         for (int i = 0; i < headers.length; i++) {
-            ColumnHeader columnHeader = ColumnHeader.getColumnHeaderByName(headers[i]);
+            ColumnHeader columnHeader = ColumnHeader.getColumnHeaderByName(headers[i].trim());
             headersMap.put(i, columnHeader);
         }
 
@@ -69,10 +70,11 @@ public class DefaultPersonParser implements PersonParser {
     private Person createPerson(Map<Integer, ColumnHeader> headers, String line) throws ParserException {
         Person person = new Person();
 
-        String[] columns = line.split(",");
+        String[] columns = line.split(LINE_SPLIT_REGEX);
         for (int i = 0; i < columns.length; i++) {
             ColumnHeader columnHeader = headers.get(i);
-
+            columns[i] = columns[i].trim();
+            
             switch (columnHeader) {
                 case FULL_NAME: buildFullName(person, columns[i]); break;
                 case GENDER: buildGender(person, columns[i]); break;
