@@ -1,4 +1,6 @@
-package test.domain;
+package com.testproject.domain;
+
+import com.testproject.domain.enumeration.Gender;
 
 public class Person {
 

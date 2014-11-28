@@ -1,8 +1,8 @@
-package test.core;
-
-import test.domain.Person;
+package com.testproject.core;
 
 import java.io.File;
+
+import com.testproject.domain.Person;
 
 public interface PersonParser {
 
