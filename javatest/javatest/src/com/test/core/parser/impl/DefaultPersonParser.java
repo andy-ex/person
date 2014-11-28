@@ -4,11 +4,14 @@ import com.test.core.exception.ParserException;
 import com.test.core.parser.PersonParser;
 import com.test.domain.Person;
 import com.test.domain.enumeration.ColumnHeader;
+import com.test.domain.enumeration.Gender;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,7 +19,10 @@ import java.util.Map;
 
 public class DefaultPersonParser implements PersonParser {
 
-    public List<Person> parsePerson(File file) throws ParserException{
+    private static final String DATE_FORMAT = "dd/MM/yyyy";
+
+    @Override
+    public List<Person> parsePerson(File file) throws ParserException {
         List<Person> persons = new ArrayList<Person>();
         BufferedReader bufferedReader = null;
 
@@ -58,14 +64,50 @@ public class DefaultPersonParser implements PersonParser {
         return headersMap;
     }
 
-    private Person createPerson(Map<Integer, ColumnHeader> headers, String line) {
+    private Person createPerson(Map<Integer, ColumnHeader> headers, String line) throws ParserException {
         Person person = new Person();
 
         String[] columns = line.split(",");
         for (int i = 0; i < columns.length; i++) {
-            String column = columns[i];
+            ColumnHeader columnHeader = headers.get(i);
+
+            switch (columnHeader) {
+                case FULL_NAME: buildFullName(person, columns[i]); break;
+                case GENDER: buildGender(person, columns[i]); break;
+                case AGE: buildAge(person, columns[i]); break;
+                case DATE_OF_BIRTH: buildDateOfBirth(person, columns[i]); break;
+            }
         }
 
         return person;
+    }
+
+    private void buildFullName(Person person, String fullName) {
+        person.setFullName(fullName);
+    }
+
+    private void buildGender(Person person, String gender) throws ParserException {
+        try {
+            person.setGender(Gender.valueOf(gender));
+        } catch (IllegalArgumentException e) {
+            throw new ParserException("Can not parse gender value - " + gender, e);
+        }
+    }
+
+    private void buildAge(Person person, String age) throws ParserException {
+        try {
+            person.setAge(Integer.parseInt(age));
+        } catch (NumberFormatException e) {
+            throw new ParserException("Can not parse age value " + age, e);
+        }
+    }
+
+    private void buildDateOfBirth(Person person, String dateOfBirth) throws ParserException {
+        SimpleDateFormat formatter = new SimpleDateFormat(DATE_FORMAT);
+        try {
+            person.setDateOfBirth(formatter.parse(dateOfBirth));
+        } catch (ParseException e) {
+            throw new ParserException("Can not parse date value " + dateOfBirth, e);
+        }
     }
 }

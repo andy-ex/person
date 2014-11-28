@@ -8,4 +8,13 @@ public enum ColumnHeader {
     private ColumnHeader(String name) {
         this.name = name;
     }
+
+    public static ColumnHeader getColumnHeaderByName(String headerName) {
+        for (ColumnHeader header : ColumnHeader.values()) {
+            if (header.name.equals(headerName)) {
+                return header;
+            }
+        }
+        throw new IllegalArgumentException("Illegal column header value: " + headerName);
+    }
 }
