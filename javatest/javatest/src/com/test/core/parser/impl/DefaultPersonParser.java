@@ -30,13 +30,15 @@ public class DefaultPersonParser implements PersonParser {
             bufferedReader = new BufferedReader(new FileReader(file));
             String line = bufferedReader.readLine();
             Map<Integer, ColumnHeader> columnHeaderMap = processHeaderLine(line);
+
             while ((line = bufferedReader.readLine()) != null) {
                 Person person = createPerson(columnHeaderMap, line);
                 if (persons.contains(person)) {
-                    System.out.println("Duplicate person found! Skipped..");
+                    System.out.println("Duplicate person found! Skipping " + person);
                 }
                 persons.add(person);
             }
+
         } catch (IOException e) {
             System.out.println("Can not parse input input file");
             throw new ParserException(e);
@@ -57,7 +59,7 @@ public class DefaultPersonParser implements PersonParser {
 
         String[] headers = line.split(",");
         for (int i = 0; i < headers.length; i++) {
-            ColumnHeader columnHeader = ColumnHeader.valueOf(headers[i]);
+            ColumnHeader columnHeader = ColumnHeader.getColumnHeaderByName(headers[i]);
             headersMap.put(i, columnHeader);
         }
 
@@ -88,7 +90,7 @@ public class DefaultPersonParser implements PersonParser {
 
     private void buildGender(Person person, String gender) throws ParserException {
         try {
-            person.setGender(Gender.valueOf(gender));
+            person.setGender(Gender.getGenderByName(gender));
         } catch (IllegalArgumentException e) {
             throw new ParserException("Can not parse gender value - " + gender, e);
         }
@@ -98,7 +100,7 @@ public class DefaultPersonParser implements PersonParser {
         try {
             person.setAge(Integer.parseInt(age));
         } catch (NumberFormatException e) {
-            throw new ParserException("Can not parse age value " + age, e);
+            throw new ParserException("Can not parse age value - " + age, e);
         }
     }
 
@@ -107,7 +109,7 @@ public class DefaultPersonParser implements PersonParser {
         try {
             person.setDateOfBirth(formatter.parse(dateOfBirth));
         } catch (ParseException e) {
-            throw new ParserException("Can not parse date value " + dateOfBirth, e);
+            throw new ParserException("Can not parse date value - " + dateOfBirth, e);
         }
     }
 }
