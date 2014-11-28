@@ -21,8 +21,7 @@ public class DefaultPersonParser implements PersonParser {
 
     private static final String DATE_FORMAT = "dd/MM/yyyy";
     private static final String LINE_SPLIT_REGEX = ",";
-	private static final SimpleDateFormat formatter = new SimpleDateFormat(
-			DATE_FORMAT);
+	private static final SimpleDateFormat formatter = new SimpleDateFormat(DATE_FORMAT);
 
     @Override
     public List<Person> parsePerson(File file) throws ParserException {
@@ -44,14 +43,13 @@ public class DefaultPersonParser implements PersonParser {
             }
 
         } catch (IOException e) {
-            System.out.println("Can not parse input input file");
-            throw new ParserException(e);
+            throw new ParserException("Error parsing input file", e);
         } finally {
             if (bufferedReader != null) {
                 try {
                     bufferedReader.close();
                 } catch (IOException e) {
-                    System.out.println("Can not close buffered reader. Reason: " + e.getMessage());
+                    System.out.println("Buffered reader was not closed. Reason: " + e.getMessage());
                 }
             }
         }

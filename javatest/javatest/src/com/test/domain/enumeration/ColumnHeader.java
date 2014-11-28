@@ -11,7 +11,7 @@ public enum ColumnHeader {
 
     public static ColumnHeader getColumnHeaderByName(String headerName) {
         for (ColumnHeader header : ColumnHeader.values()) {
-            if (header.name.equals(headerName)) {
+            if (header.name.equalsIgnoreCase(headerName)) {
                 return header;
             }
         }
