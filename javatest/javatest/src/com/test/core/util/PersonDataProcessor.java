@@ -55,14 +55,14 @@ public class PersonDataProcessor {
 		}
 		int summedAge = 0;
 		for (Person person : persons) {
-			summedAge = person.getAge();
+			summedAge += person.getAge();
 		}
-		int result;
-		result = summedAge / persons.size();
-		return result;
-		// } else {
-		// throw new DataProcessorException();
-		// }
+		try {
+			int result = summedAge / persons.size();
+			return result;
+		} catch (ArithmeticException e) {
+			throw new DataProcessorException(e);
+		}
 	}
 
 	/**
@@ -84,5 +84,24 @@ public class PersonDataProcessor {
 			throw new DataProcessorException();
 		}
 		return person1TotalDays - person2TotalDays;
+	}
+
+	/**
+	 * return person from list by name
+	 * 
+	 * @param name
+	 * @return
+	 * @throws DataProcessorException
+	 */
+	public static Person findPersonByName(final List<Person> persons,
+			final String name) throws DataProcessorException {
+		for (Person person : persons) {
+			if (name.equals(person.getFullName())) {
+				return person;
+			}
+		}
+		throw new DataProcessorException(
+				"ERROR: No person with such name was found");
+
 	}
 }
