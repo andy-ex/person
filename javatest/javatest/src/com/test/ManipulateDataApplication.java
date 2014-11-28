@@ -28,7 +28,8 @@ public class ManipulateDataApplication {
 			double averageAge = PersonDataProcessor.countAverageAge(persons);
 			System.out.println("Question 2. In years what is the average age of the people in the list?");
 			System.out.println("Answer: " + averageAge);
-			Person person1 = PersonDataProcessor.findPersonByName(persons, FIRST_PERSON_NAME);
+			Person person1 = PersonDataProcessor.findPersonByName(persons,
+					FIRST_PERSON_NAME);
 			Person person2 = PersonDataProcessor.findPersonByName(persons, SECOND_PERSON_NAME);
 			double daysOlder = PersonDataProcessor.countDaysOlder(person1,
 					person2);
@@ -36,8 +37,8 @@ public class ManipulateDataApplication {
 					.println("Question 3. How many days older is Jeff Briton than Tom Soyer?");
 			 System.out.println("Answer: " + daysOlder);
 		} catch (ParserException | DataProcessorException e) {
-			System.out.println("ERROR occured while processing: "
-					+ e.getMessage());
+			System.out.println("ERROR occured while processing: ");
+			e.printStackTrace();
 		}
 
 	}

@@ -1,11 +1,5 @@
 package com.test.core.parser.impl;
 
-import com.test.core.exception.ParserException;
-import com.test.core.parser.PersonParser;
-import com.test.domain.Person;
-import com.test.domain.enumeration.ColumnHeader;
-import com.test.domain.enumeration.Gender;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -17,10 +11,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.test.core.exception.ParserException;
+import com.test.core.parser.PersonParser;
+import com.test.domain.Person;
+import com.test.domain.enumeration.ColumnHeader;
+import com.test.domain.enumeration.Gender;
+
 public class DefaultPersonParser implements PersonParser {
 
     private static final String DATE_FORMAT = "dd/MM/yyyy";
     private static final String LINE_SPLIT_REGEX = ",";
+	private static final SimpleDateFormat formatter = new SimpleDateFormat(
+			DATE_FORMAT);
 
     @Override
     public List<Person> parsePerson(File file) throws ParserException {
@@ -36,8 +38,9 @@ public class DefaultPersonParser implements PersonParser {
                 Person person = createPerson(columnHeaderMap, line);
                 if (persons.contains(person)) {
                     System.out.println("Duplicate person found! Skipping " + person);
-                }
-                persons.add(person);
+				} else {
+					persons.add(person);
+				}
             }
 
         } catch (IOException e) {
@@ -52,7 +55,7 @@ public class DefaultPersonParser implements PersonParser {
                 }
             }
         }
-        return null;
+		return persons;
     }
 
     private Map<Integer, ColumnHeader> processHeaderLine(String line) {
@@ -107,7 +110,6 @@ public class DefaultPersonParser implements PersonParser {
     }
 
     private void buildDateOfBirth(Person person, String dateOfBirth) throws ParserException {
-        SimpleDateFormat formatter = new SimpleDateFormat(DATE_FORMAT);
         try {
             person.setDateOfBirth(formatter.parse(dateOfBirth));
         } catch (ParseException e) {

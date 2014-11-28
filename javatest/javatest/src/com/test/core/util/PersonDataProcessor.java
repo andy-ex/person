@@ -77,13 +77,15 @@ public class PersonDataProcessor {
 			final Person person2) throws DataProcessorException {
 		double person1TotalDays;
 		double person2TotalDays;
-		if (person1 != null && person2 != null) {
+		try {
 			person1TotalDays = person1.getDateOfBirth().getTime() / DAY;
 			person2TotalDays = person2.getDateOfBirth().getTime() / DAY;
-		} else {
-			throw new DataProcessorException();
+		} catch (NullPointerException e) {
+			throw new DataProcessorException(
+					"Can't calculate the difference, beacuse parameters are not correct",
+					e);
 		}
-		return person1TotalDays - person2TotalDays;
+		return person2TotalDays - person1TotalDays;
 	}
 
 	/**
@@ -95,6 +97,12 @@ public class PersonDataProcessor {
 	 */
 	public static Person findPersonByName(final List<Person> persons,
 			final String name) throws DataProcessorException {
+		if (persons == null || persons.size() == 0) {
+			throw new DataProcessorException("ERROR: No persons was specified");
+		}
+		if (name == null) {
+			throw new DataProcessorException("ERROR: No name was specified");
+		}
 		for (Person person : persons) {
 			if (name.equals(person.getFullName())) {
 				return person;
