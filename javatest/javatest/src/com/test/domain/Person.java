@@ -2,18 +2,21 @@ package com.test.domain;
 
 import com.test.domain.enumeration.Gender;
 
+import java.util.Date;
+
 public class Person {
 
-    private String name;
+    private String fullName;
     private Gender gender;
     private int age;
+    private Date dateOfBirth;
 
-    public String getName() {
-        return name;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public Gender getGender() {
@@ -30,5 +33,13 @@ public class Person {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 }
